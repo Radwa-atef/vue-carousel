@@ -1,0 +1,86 @@
+\:root
+  --carousel-primary: #98A2B3
+  --carousel-secondary: #475467
+  --carousel-black: #000000
+.carousel-container
+    position: relative
+    overflow: hidden
+    height: 100%
+    width: 100%
+    %carousel-navigators
+        background-color: white
+        opacity: 0.8
+        padding: 8px 15px
+        border-radius: 18px
+        transition: all 0.2s ease-in
+        &:hover
+            opacity: 1
+    .carousel-navigator
+        cursor: pointer
+        position: absolute
+        top: 50%
+        z-index: 10
+        span
+            @extend %carousel-navigators
+        &.previous
+            left: 10px
+            [dir=rtl] &
+                left: unset
+                right: 10px
+        &.next
+            right: 10px
+            [dir=rtl] &
+                right: unset
+                left: 10px
+    .carousel-content
+        width: 100%
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
+        gap: 10px
+        .slide-type
+            width: 100%
+        .carousel-img-container
+            width: auto
+            height: auto
+    .carousel-delimiters
+        display: flex
+        flex-wrap: wrap
+        align-items: center
+        justify-content: center
+        cursor: pointer
+        position: absolute
+        right: 50%
+        transform: translateX(50%)
+        bottom: 10px
+        .dot-delimiter
+            transition: all 0.4s ease-in-out
+            padding: 5px 5px
+            border-radius: 34px
+            display: flex
+            justify-content: center
+            align-items: center
+            &:hover
+                background-color: rgba(0,0,0,0.1)
+.cursor-no-drop
+    cursor: no-drop !important
+.cursor-pointer
+    cursor: pointer
+.d-none
+    display: none
+.d-block
+    display: block
+.text-center
+    text-align: center
+
+.slide-fade 
+    animation: slideFadeIn 0.7s ease forwards
+@keyframes slideFadeIn 
+    0% 
+        transform: translateX(100%)
+        opacity: .2
+    100% 
+        transform: translateX(0)
+        opacity: 1
+
