@@ -48,9 +48,9 @@ Description of your Vue component.
 
 | Slot Name | Description |
 |-----------|-------------|
-| `previous-navigator` | Slot for custom content inside the previous navigator. |
-| `next-navigator` | Slot for custom content inside the next navigator.|
-| `delimiter` | Slot for custom content inside each delimiter. You can customize the appearance based on the `activeDelimiter` slot prop. |
+| `previous-navigator` | Slot for custom content inside the previous navigator. You can customize the appearance based on the `isDisabled` slot prop.|
+| `next-navigator` | Slot for custom content inside the next navigator. You can customize the appearance based on the `isDisabled` slot prop.|
+| `delimiter` | Slot for custom content inside the delimiters. You can customize the appearance based on the `activeDelimiter` slot prop. |
 
 
 #### Emits

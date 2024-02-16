@@ -66,7 +66,7 @@ describe("the content DOM rendering", () => {
     });
 
     content.forEach((el, index) => {
-      const clickableSlide = wrapper.find(`[data-test-id=slide-${index}`)
+      const clickableSlide = wrapper.find(`[data-test-id=slide-${index+1}`)
       clickableSlide.trigger("click");
       if (el.isClickable) {
         // assert event has been emitted

@@ -41,12 +41,12 @@ describe("the navigator component", () => {
     const carouselContentElement = wrapper.find(".carousel-content")
     const displayedItems = carouselContentElement.findAll("[data-test-id=active]")
 
-    const randomPosition = randomValue([0, 2, 4, 6])
+    const randomPosition = randomValue([1, 2, 3, 4,5,6,7,8,9])
 
     wrapper.setData({ activeSlideIndex: randomPosition })
     await nextNavigatorElement.trigger("click")
 
-    expect(wrapper.vm.activeSlideIndex).toBe(randomPosition + wrapper.props().itemsPerSlide)
+    expect(wrapper.vm.activeSlideIndex).toBe(randomPosition + 1)
     expect(displayedItems.length).toBeLessThanOrEqual(wrapper.props().itemsPerSlide)
   })
 
@@ -59,12 +59,12 @@ describe("the navigator component", () => {
     const carouselContentElement = wrapper.find(".carousel-content")
     const displayedItems = carouselContentElement.findAll("[data-test-id=active]")
 
-    const randomPosition = randomValue([2, 4, 6, 8])
+    const randomPosition = randomValue([2, 3, 4, 5])
 
     wrapper.setData({ activeSlideIndex: randomPosition })
     await nextNavigatorElement.trigger("click")
 
-    expect(wrapper.vm.activeSlideIndex).toBe(randomPosition - wrapper.props().itemsPerSlide)
+    expect(wrapper.vm.activeSlideIndex).toBe(randomPosition - 1)
     expect(displayedItems.length).toEqual(wrapper.props().itemsPerSlide)
   })
 
@@ -75,7 +75,7 @@ describe("the navigator component", () => {
         itemsPerSlide: 2,
       },
     });
-    wrapper.setData({ activeSlideIndex: 4 })
+    wrapper.setData({ activeSlideIndex: 3 })
     const nextNavigatorElement = wrapper.find("[data-test-id=carousel-next-navigator]")
     await nextNavigatorElement.trigger("click")
     expect(wrapper.vm.isNextSlideDisabled).toBe(true);
@@ -90,7 +90,7 @@ describe("the navigator component", () => {
       },
     });
     const previousNavigatorElement = wrapper.find("[data-test-id=carousel-previous-navigator]");
-    wrapper.setData({ activeSlideIndex: 0 })
+    wrapper.setData({ activeSlideIndex: 1 })
     expect(wrapper.vm.isPreviousSlideDisabled).toBe(true);
     expect(previousNavigatorElement.classes()).toContain("cursor-no-drop");
   })

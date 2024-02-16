@@ -89,7 +89,7 @@
     },
     data() {
       return {
-        activeSlideIndex: 0,
+        activeSlideIndex: 1,
         carouselInterval: null,
       };
     },
@@ -97,23 +97,23 @@
       lengthOfData() {
         return this.content.length;
       },
-      isPreviousSlideDisabled() {
-        return this.activeSlideIndex === 0;
-      },
-      isNextSlideDisabled() {
-        return (
-          this.activeSlideIndex + this.itemsPerSlide >= this.lengthOfData
-        );
-      },
-      displayNavigators() {
-        return this.showNavigators && !this.hideControls && this.lengthOfData > 1;
-      },
-      delimitersLength() {
-        let num = 0;
+      numOfSlides(){
+        let num = 1;
         if (this.lengthOfData > this.itemsPerSlide) {
           num = Math.ceil(this.lengthOfData / this.itemsPerSlide);
         }
         return num;
+      },
+      isPreviousSlideDisabled() {
+        return this.activeSlideIndex === 1;
+      },
+      isNextSlideDisabled() {
+        return (
+          this.activeSlideIndex == this.numOfSlides
+        );
+      },
+      displayNavigators() {
+        return this.showNavigators && !this.hideControls && this.numOfSlides > 1;
       },
     },
     mounted() {
@@ -141,23 +141,23 @@
       },
       autoPlaySlides() {
         if (this.isNextSlideDisabled) {
-          this.activeSlideIndex = 0;
+          this.activeSlideIndex = 1;
         } else {
-          this.activeSlideIndex += this.itemsPerSlide;
+          this.activeSlideIndex ++;
         }
       },
       setActiveSlideIndex(i) {
-        this.activeSlideIndex = i * this.itemsPerSlide;
+        this.activeSlideIndex = i;
         this.rePlayInterval();
       },
       previousSlide() {
         if (this.isPreviousSlideDisabled) return
-        this.activeSlideIndex -= this.itemsPerSlide;
+        this.activeSlideIndex --;
         this.rePlayInterval();
       },
       nextSlide() {
         if (this.isNextSlideDisabled) return
-        this.activeSlideIndex += this.itemsPerSlide;
+        this.activeSlideIndex ++;
         this.rePlayInterval();
       },
       entityClicked(item) {
@@ -178,7 +178,10 @@
       :class="{ 'cursor-no-drop': isPreviousSlideDisabled }"
       @click="previousSlide"
     >
-      <slot name="previous-navigator">
+      <slot name="previous-navigator"
+      :slot-props="{
+            isDisabled: isPreviousSlideDisabled
+          }">
         <span v-if="direction === 'rtl'"><RightIcon :color="isPreviousSlideDisabled ? 'var(--carousel-secondary)' : 'var(--carousel-black)'" /></span>
         <span v-else><LeftIcon :color="isPreviousSlideDisabled ? 'var(--carousel-secondary)' : 'var(--carousel-black)'" /></span>
       </slot>
@@ -187,20 +190,19 @@
 
     <!-- content -->
     <!--
-      - (activeSlideIndex + itemsPerSlide) to handle case if the activeSlideIndex = 0
       - this condition implemented to render all items with d-none class and add d-block
-      if the items indexes are between the current index and the activeSlideIndex (0-3), (3-6) ...
+      if the items indexes are between the previous activeSlideIndex and the next activeSlideIndex
+      based on itemsPerSlide (0-3), (3-6) ...
      -->
     <div class="carousel-content">
       <div
         v-for="(item, index) in content" :key="index"
-        :class="index >= activeSlideIndex + itemsPerSlide ? 'd-none' :
-          index < activeSlideIndex ? 'd-none':'d-block'"
-        :data-test-id="index >= activeSlideIndex + itemsPerSlide ? 'not-active' :
-          index < activeSlideIndex ? 'not-active':'active'"
+        :class="
+          (index+1) > ((activeSlideIndex -1)* itemsPerSlide) && (index+1) <= ((activeSlideIndex) * itemsPerSlide) ? 'd-block' :'d-none' "
+        :data-test-id="(index+1) > ((activeSlideIndex -1)* itemsPerSlide) && (index+1) <= ((activeSlideIndex) * itemsPerSlide) ? 'active' : 'not-active'"
       >
         <Slide
-          :data-test-id="`slide-${index}`"
+          :data-test-id="`slide-${index+1}`"
           class="slide-fade slide-item"
           :class="{ 'cursor-pointer': item.isClickable}"
           :item="item"
@@ -218,7 +220,10 @@
       :class="{ 'cursor-no-drop': isNextSlideDisabled }"
       @click="nextSlide()"
     >
-      <slot name="next-navigator">
+      <slot name="next-navigator"
+      :slot-props="{
+            isDisabled: isNextSlideDisabled
+          }">>
         <span v-if="direction === 'rtl'"><LeftIcon :color="isNextSlideDisabled ? 'var(--carousel-secondary)' : 'var(--carousel-black)'" /></span>
         <span v-else><RightIcon :color="isNextSlideDisabled ? 'var(--carousel-secondary)' : 'var(--carousel-black)'" /></span>
       </slot>
@@ -227,11 +232,11 @@
 
     <!-- delimiters -->
     <div
-      v-if="showDelimiters && !hideControls && lengthOfData > 1"
+      v-if="showDelimiters && !hideControls && numOfSlides > 1"
       class="carousel-delimiters"
     >
       <div
-        v-for="(_, index) in delimitersLength"
+        v-for="(index) in numOfSlides"
         :key="index"
         class="delimiter-container"
         @click="setActiveSlideIndex(index)"
@@ -239,13 +244,13 @@
         <slot
           name="delimiter"
           :slot-props="{
-            activeDelimiter: !!index * itemsPerSlide === activeSlideIndex
+            activeDelimiter: (index === activeSlideIndex)
           }"
         >
           <span class="dot-delimiter">
             <DotIcon
               :color="
-                index * itemsPerSlide === activeSlideIndex
+                index === activeSlideIndex
                   ? 'var(--carousel-primary)'
                   : 'var(--carousel-secondary)'
               "
