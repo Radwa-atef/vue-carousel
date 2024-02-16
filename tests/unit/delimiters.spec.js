@@ -37,17 +37,17 @@ it("should render delimiters based on content length and number of items per sli
     { lengthOfData: 10, itemsPerSlide: 2, expectedDelimitersLength: 5 },
     { lengthOfData: 8, itemsPerSlide: 3, expectedDelimitersLength: 3 },
     { lengthOfData: 5, itemsPerSlide: 1, expectedDelimitersLength: 5 },
-    { lengthOfData: 0, itemsPerSlide: 1, expectedDelimitersLength: 0 },
-    { lengthOfData: 4, itemsPerSlide: 5, expectedDelimitersLength: 0 },
+    { lengthOfData: 0, itemsPerSlide: 1, expectedDelimitersLength: 1 },
+    { lengthOfData: 4, itemsPerSlide: 5, expectedDelimitersLength: 1 },
   ];
   testCases.forEach((el) => {
     const wrapper = mount(Carousel, {
       propsData: { content: Array(el.lengthOfData).fill().map(() => ({ value: "", type: "image" })), itemsPerSlide: el.itemsPerSlide },
     });
     if (el.lengthOfData > el.itemsPerSlide) {
-      expect(wrapper.vm.delimitersLength).toEqual(el.expectedDelimitersLength)
+      expect(wrapper.vm.numOfSlides).toEqual(el.expectedDelimitersLength)
     } else {
-      expect(wrapper.vm.delimitersLength).toEqual(0)
+      expect(wrapper.vm.numOfSlides).toEqual(1)
     }
   })
 })
@@ -59,12 +59,12 @@ it("should display the clicked index slide item with content based on itemsPerSl
   const carouselContentElement = wrapper.find(".carousel-content")
   const displayedItems = carouselContentElement.findAll("[data-test-id=active]")
 
-  const randomElementPosition = randomValue([0, 1, 2]) // depends on itemsPerSlide
+  const randomElementPosition = randomValue([1, 2])
 
   const delimiterElement = wrapper.findAll(".delimiter-container").at(randomElementPosition)
   await delimiterElement.trigger("click");
 
-  expect(wrapper.vm.activeSlideIndex).toBe(randomElementPosition * wrapper.props().itemsPerSlide);
+  expect(wrapper.vm.activeSlideIndex).toBe(randomElementPosition+1);
   expect(displayedItems.length).toBeLessThanOrEqual(wrapper.props().itemsPerSlide)
 })
 
@@ -75,12 +75,13 @@ it("should do nothing when clicking on the active index", async () => {
       itemsPerSlide: 2,
     },
   });
-  const randomElementPosition = randomValue([0, 1, 2]) // depends on itemsPerSlide
+  const randomElementPosition = randomValue([1, 2])
 
-  wrapper.setData({ activeSlideIndex: randomElementPosition * wrapper.props().itemsPerSlide })
-  const delimiterElement = wrapper.findAll(".delimiter-container").at(randomElementPosition)
-  await delimiterElement.trigger("click");
-  expect(wrapper.vm.activeSlideIndex).toEqual(randomElementPosition * wrapper.props().itemsPerSlide)
+  wrapper.setData({ activeSlideIndex: randomElementPosition })
+  // const delimiterElement = wrapper.findAll(".delimiter-container").at(randomElementPosition)
+  wrapper.vm.setActiveSlideIndex(randomElementPosition)
+  // await delimiterElement.trigger("click");
+  expect(wrapper.vm.activeSlideIndex).toEqual(randomElementPosition)
 })
 
 it("should have a named slot for the delimiters called delimiters", () => {

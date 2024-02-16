@@ -12,9 +12,9 @@ it("shouldn't display the next slide after the interval time if the autoplay pro
     },
   });
   jest.advanceTimersByTime(wrapper.props().interval); // by default = 5000
-  expect(wrapper.vm.activeSlideIndex).toBe(0); // by default starts with 0
+  expect(wrapper.vm.activeSlideIndex).toBe(1); // by default starts with 1
   jest.runOnlyPendingTimers();
-  expect(wrapper.vm.activeSlideIndex).toBe(0);
+  expect(wrapper.vm.activeSlideIndex).toBe(1);
 })
 
 it("should display the next slide after the interval time if the autoplay prop is true", () => {
@@ -53,9 +53,9 @@ it("should autoloop over the media", () => {
     },
   });
 
-  wrapper.setData({ activeSlideIndex: 4 }) // based on itemsPerSlide, the last index will be 4
+  wrapper.setData({ activeSlideIndex: 3 }) // based on itemsPerSlide, the last index will be 3
   jest.advanceTimersByTime(3000);
-  expect(wrapper.vm.activeSlideIndex).toBe(0);
+  expect(wrapper.vm.activeSlideIndex).toBe(1);
 })
 
 it("should clear the interval in the beforeDestroy hook", () => {
