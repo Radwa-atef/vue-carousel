@@ -9,10 +9,10 @@ This is a beta version 👩🏼‍💻.
 
 ## ⬇️ Installation
 ```
-npm install @radwa-atef/carousel-vue
+npm install @radwa-atef/vue-carousel
 ```
 ```
-yarn add @radwa-atef/carousel-vue
+yarn add @radwa-atef/vue-carousel
 ```
 
 ## ✨ Features
@@ -25,6 +25,10 @@ yarn add @radwa-atef/carousel-vue
 - Responsive.
 
 ## 📚 Documentation 
+
+### GitHub Repository
+
+You can find the source code for this project on [GitHub](https://github.com/Radwa-atef/vue-carousel).
 
 ### 👀 Options
 

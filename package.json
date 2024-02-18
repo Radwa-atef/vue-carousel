@@ -1,6 +1,6 @@
 {
-  "name": "@radwa-atef/carousel-vue",
-  "version": "0.2.1",
+  "name": "@radwa-atef/vue-carousel",
+  "version": "0.2.3",
   "main": "dist/carousel.umd.js",
   "unpkg": "dist/carousel.umd.min.js",
   "style": "dist/carousel.css",
